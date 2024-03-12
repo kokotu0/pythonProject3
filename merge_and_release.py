@@ -10,10 +10,16 @@ import openpyxl.worksheet.header_footer
 import datetime
 from openpyxl.styles.numbers import builtin_format_code, builtin_format_id
 from openpyxl.styles import numbers
-def merge_and_release(directory_set,save_file):
+PO_table=pd.read_excel('C:\\Users\\Administrator\\Desktop\\한태희 파일\\test\\PO_table.xlsx',index_col=0,header=[0,1],dtype=str)
+re.search(r'\d+',x)[0]
+import re
+PO_table[('발주','번호')]=PO_table[('발주','번호')].apply(lambda x  : re.search(r'\d+',x)[0])
+PO_table.loc[lambda x: x[('발주','번호')]=='70447923',('발주','운송')]
+def merge_and_release(directory_set,save_file,PO_table):
     wb = Workbook()
     ws=wb.active
     ws.title="요약 시트"
+
     for directory in directory_set:
         font1=Font(name='맑은 고딕',
                    size=18,
@@ -79,7 +85,7 @@ def merge_and_release(directory_set,save_file):
         df=pd.read_excel(directory)
         date_=datetime.datetime.strptime(' '.join(df.iloc[11][5].split()[0].split('/')),"%Y %m %d")
         ws['C2']=(date_.strftime("%Y년 %m월 %d일 {}".format(["월요일","화요일","수요일","목요일","금요일","토요일","일요일"][date_.weekday()])))
-        ws['C3']=df.iloc[11][2]+" - 쉽먼트"
+        ws['C3']=df.iloc[11][2]+f" - {P}"
         num=df.index[df.iloc[:,0]=="No."][0]+2
 
         text_wraping=Alignment(wrap_text=True)

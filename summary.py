@@ -39,7 +39,7 @@ def delete_all():
         file_list.delete(tk.END)
 
 def save_file():
-
+    global directory_set
     save_file_name=tkinter.filedialog.asksaveasfilename(initialdir='/',defaultextension=".xlsx",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
     print(save_file_name)
     directory_set=file_list.get(0,tk.END)

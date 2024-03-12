@@ -1,7 +1,8 @@
 from urllib.parse import urlparse
 import urllib
 import datetime
-def selenium_order_list_save(start_date,path='C:\\Users\\Administrator\\Desktop\\한태희 파일\\test',):
+def selenium_order_list_save(start_date=(datetime.datetime.now()-datetime.timedelta(14)).strftime('%Y-%m-%d'),
+                             path='C:\\Users\\Administrator\\Desktop\\한태희 파일\\test',):
     from selenium import webdriver
     from selenium.webdriver.common.by import By
     import pandas as pd
@@ -10,6 +11,7 @@ def selenium_order_list_save(start_date,path='C:\\Users\\Administrator\\Desktop\
     import os
     try:
         os.makedirs(path)
+        os.makedirs(f'{path}\\발주서')
     except:pass
     download_folder=path
     from selenium.webdriver.chrome.options import Options
@@ -69,8 +71,15 @@ def selenium_order_list_save(start_date,path='C:\\Users\\Administrator\\Desktop\
 
     print(table)
 
-    table.to_excel('./test.xlsx')
-    #
+    table.to_excel(f'{path}\\PO_table.xlsx')
+    import shutil
+    import zipfile
+    import re
+    for zip_file in [i for i in os.listdir(path) if '.zip' in i]:
+        shutil.unpack_archive(f'{path}\\{zip_file}',extract_dir=f'{path}\\발주서',format='zip')
+    for file in os.listdir(f'{path}\\발주서'):
+        os.rename(f'{path}\\발주서\\{file}',f'{path}\\발주서\\{re.search(r'\d+',file).group(0)}.xlsx')
+
     # driver.find_element(By.XPATH,'//*[@id="pagination"]/ul/li[3]/a').get_attribute('href')
     driver.quit()
     del driver
