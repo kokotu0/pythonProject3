@@ -13,7 +13,7 @@ from openpyxl.styles import numbers
 
 import re
 
-def merge_and_release(directory_set,save_dir,PO_table):
+def merge_and_release(directory_set,save_file_name,PO_table):
 
     wb = Workbook()
     ws=wb.active
@@ -180,9 +180,15 @@ def merge_and_release(directory_set,save_dir,PO_table):
     ws.page_margins.right=0.26
 
     #순서설정
-    PO_table=pd.DataFrame
-    PO_table.sort_values(by=('발주','번호'),ascending=False)
 
-    wb.sheetnames
-    wb.move_sheet()
-    wb.save(save_dir)
+    ori=wb.sheetnames
+    ascended=sorted(wb.sheetnames,reverse=True)
+
+    for sheet_name in ascended.copy():
+        wb.move_sheet(sheet_name,-wb.sheetnames.index(sheet_name)+ascended.index(sheet_name))
+        print(sheet_name,ascended.index(sheet_name)-wb.sheetnames.index(sheet_name))
+
+    import numpy as np
+    print(np.array(wb.sheetnames)==np.array(ascended))
+
+    wb.save(save_file_name)
