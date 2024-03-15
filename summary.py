@@ -1,9 +1,18 @@
+import pathlib
 import tkinter as tk
 import tkinter.font
 import tkinter.filedialog
 import tkinter.messagebox
-
+import pickle
 from merge_and_release import *
+import os
+with open(file=f'{os.getenv("LOCALAPPDATA")}\\setup_file.pickle',mode='wb') as f:
+    pickle.dump('dd',f)
+with open(file=f'{os.getenv("LOCALAPPDATA")}\\setup_file.pickle', mode='rb') as f:
+    pickle.load('dd', f)
+pickle.dump('123','dd.txt')
+
+print(os.getenv('LOCALAPPDATA'))
 
 root=tk.Tk()
 root.title("Simple application")
@@ -23,6 +32,7 @@ def open_files():
     overlap=0
     result=tkinter.filedialog.askopenfilenames(initialdir='/',title="파일 선택",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
     #중복 자동제거
+
     result=list(set(result))
     for file_name in result:
         if file_name in file_list.get(0,tk.END):
@@ -37,12 +47,17 @@ def delete_all():
     count=file_list.size()
     for i in range(count):
         file_list.delete(tk.END)
-
+from dewbel_coupang_order_automation_selenium import selenium_order_list_save
 def save_file():
     global directory_set
-    save_file_name=tkinter.filedialog.asksaveasfilename(initialdir='/',defaultextension=".xlsx",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
+    global save_file_name
+    save_file_name=tkinter.filedialog.asksaveasfilename(initialdir='./',defaultextension=".xlsx",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
     print(save_file_name)
+    path=str(pathlib.Path(save_file_name).parent)
+    table=selenium_order_list_save(path=path)
+    table
     directory_set=file_list.get(0,tk.END)
+    [pathlib.Path(file_path).name for file_path in directory_set]
     print(directory_set)
     merge_and_release(directory_set,save_file_name)
     tkinter.messagebox.showinfo(message="작업 완료")
@@ -61,6 +76,18 @@ button_save.grid(row=4,column=0,sticky='we')
 button_exit=tk.Button(button_frame,text="종료하기",command=root.destroy)
 button_exit.grid(row=5,column=0,sticky='we')
 
+id_label=tk.Label(button_frame,text="id",)
+id_label.grid(row=6,column=0,sticky='we')
+
+id_entry=tk.Entry(button_frame,)
+id_entry.grid(row=7,column=0,sticky='we')
+password_label=tk.Label(button_frame,text="쿠팡서플라이어허브_패스워드",)
+password_label.grid(row=8,column=0,sticky='we')
+password_entry=tk.Entry(button_frame,)
+password_entry.insert(0,'gksxogml1')
+password_entry.grid(row=9,column=0,sticky='we')
+
+print(password_entry.get())
 file_frame_lbl['font']=button_font
 button_load['font']=button_font
 button_delete['font']=button_font
@@ -70,3 +97,4 @@ button_exit['font']=button_font
 
 
 root.mainloop()
+
