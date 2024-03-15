@@ -13,7 +13,7 @@ try:
         setup=pickle.load(f)
 except:
     default_setup = {'coupang_supply_id': 'pm2100', 'coupang_supply_password': 'cleanfeel6!', 'open_dir': './',
-                     'save_dir': './','geometry':'752x860+78+78'}
+                     'save_dir': './','geometry':'752x860+78+78','save_file_name':'summary.xlsx'}
     setup=default_setup
 
 
@@ -64,7 +64,8 @@ def save_file():
     global directory_set
     global save_file_name
     global file_names
-    save_file_name=tkinter.filedialog.asksaveasfilename(initialdir=setup['save_dir'],defaultextension=".xlsx",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
+    save_file_name=tkinter.filedialog.asksaveasfilename(initialdir=setup['save_dir'],initialfile=setup['save_file_name'],defaultextension=".xlsx",filetypes=(("xslx files","*.xlsx"),("all files","*.*")))
+    if len(save_file_name)==0:return
     # print(save_file_name)
     save_dir=str(pathlib.Path(save_file_name).parent)
 
@@ -77,16 +78,17 @@ def save_file():
     coupang_supply_id=id_entry.get()
     coupang_supply_password=password_entry.get()
     try:
-        PO_table=selenium_order_list_save(coupang_supply_id=coupang_supply_id,coupang_supply_password=coupang_supply_password,path=save_dir)
+        PO_table=selenium_order_list_save(coupang_supply_id=coupang_supply_id,coupang_supply_password=coupang_supply_password,path=save_dir,)
     except Exception as e:
         print(e)
         tk.messagebox.showerror('에러발생','에러가 발생했습니다. 재실행하거나 id 및 비밀번호를 확인해주세요!')
         return
     merge_and_release(directory_set,save_file_name,PO_table=PO_table)
+    save_file_name_for_setting=pathlib.Path(save_file_name).name
 
     tkinter.messagebox.showinfo(message="작업 완료")
 
-
+    setup['save_file_name']=save_file_name_for_setting
     setup['save_dir']=save_dir
     setup['coupang_supply_id']=coupang_supply_id
     setup['coupang_supply_password']=coupang_supply_password
