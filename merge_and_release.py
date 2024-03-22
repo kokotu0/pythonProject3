@@ -102,7 +102,7 @@ def merge_and_release(directory_set,save_file_name,PO_table):
                 index=int(df.iloc[num][0])
                 a=ws.cell(row=5+index,column=1,value=index)
                 b=ws.cell(row=5+index,column=3,value=df.iloc[num][2])
-                c=ws.cell(row=5+index,column=4,value=df.iloc[num][6])
+                c=ws.cell(row=5+index,column=4,value=df.iloc[num][7])
                 ws.cell(row=5+index,column=20,value=df.iloc[num][9])
                 a.alignment=text_wraping
                 b.alignment=text_wraping
