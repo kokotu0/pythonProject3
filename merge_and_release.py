@@ -101,9 +101,9 @@ def merge_and_release(directory_set,save_file_name,PO_table):
             try :
                 index=int(df.iloc[num][0])
                 a=ws.cell(row=5+index,column=1,value=index)
-                b=ws.cell(row=5+index,column=3,value=df.iloc[num][2])
-                c=ws.cell(row=5+index,column=4,value=df.iloc[num][7])
-                ws.cell(row=5+index,column=20,value=df.iloc[num][9])
+                b=ws.cell(row=5+index,column=3,value=df.iloc[num][2]) #상품명/옵션/BARCODE
+                c=ws.cell(row=5+index,column=4,value=df.iloc[num][7]) #업체납품가능수량
+                ws.cell(row=5+index,column=20,value=df.iloc[num][9]) #매입가
                 a.alignment=text_wraping
                 b.alignment=text_wraping
                 c.alignment=text_wraping
@@ -133,7 +133,7 @@ def merge_and_release(directory_set,save_file_name,PO_table):
     ws['A1'].alignment=alignment
     ws['A1'].font=Font(size=20)
     ws.merge_cells('A1:I1')
-    for i,j in enumerate(["순번","발주번호","바코드","상품명","물류센터","입고예정일","수량","매입가액","매입가액 X 수량"]):
+    for i,j in enumerate(["순번","발주번호","바코드","상품명","물류센터","입고예정일","수량(납품가능수량)","매입가액","매입가액 X 수량"]):
         ws.cell(row=2,column=(1+i),value=j)
 
     for sheet in wb.sheetnames[1:]:
